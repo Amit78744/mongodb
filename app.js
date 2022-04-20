@@ -3,7 +3,11 @@ const app = express();
 const User = require('./users')
 
 const mongoose = require('mongoose');
-const users = require('./users');
+const bodyParser = require('body-parser');
+
+app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 mongoose.connect("mongodb://amit:4VujvdA27MrSMkZC@cluster0-shard-00-00.rasir.mongodb.net:27017,cluster0-shard-00-01.rasir.mongodb.net:27017,cluster0-shard-00-02.rasir.mongodb.net:27017/testmongodb?ssl=true&replicaSet=atlas-flzxpn-shard-0&authSource=admin&retryWrites=true&w=majority",
     {
@@ -15,9 +19,15 @@ mongoose.connect("mongodb://amit:4VujvdA27MrSMkZC@cluster0-shard-00-00.rasir.mon
         console.log("error :-", err)
 })
 
-User.find({}, function(err,users){
-    if(err) console.log(err);
 
-    console.log(users)
+
+app.get('/getAllUsers',async (req,res)=>{
+
+    User.find({}, function(err,users){
+        if(err) console.log(err);
+    
+        res.send(users);
+    })
 })
 
+app.listen(3000);
