@@ -12,7 +12,7 @@ mongoose.connect("mongodb://amit:4VujvdA27MrSMkZC@cluster0-shard-00-00.rasir.mon
     }).then(() => {
         console.warn("db connection succesfully.")
     }).catch((err) => {
-        console.log("error", err)
+        console.log("error :-", err)
 })
 
 User.find({}, function(err,users){
