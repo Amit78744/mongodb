@@ -2,24 +2,15 @@ const express = require('express');
 const app = express();
 const User = require('./users')
 
-const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+
+const dbConnect = require('./config');
 
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb://amit:4VujvdA27MrSMkZC@cluster0-shard-00-00.rasir.mongodb.net:27017,cluster0-shard-00-01.rasir.mongodb.net:27017,cluster0-shard-00-02.rasir.mongodb.net:27017/testmongodb?ssl=true&replicaSet=atlas-flzxpn-shard-0&authSource=admin&retryWrites=true&w=majority",
-    {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    }).then(() => {
-        console.warn("db connection succesfully.")
-    }).catch((err) => {
-        console.log("error :-", err)
-})
-
-
+dbConnect();
 
 app.get('/getAllUsers',async (req,res)=>{
 
@@ -28,6 +19,13 @@ app.get('/getAllUsers',async (req,res)=>{
     
         res.send(users);
     })
+})
+
+app.post('/createUser',async (req,res)=>{
+
+    var result = await User.insertMany([req.body]);
+
+    res.send(result);
 })
 
 app.listen(3000);
